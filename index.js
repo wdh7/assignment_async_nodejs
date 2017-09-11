@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 // 1
 var p = new Promise(function(resolve, reject) {
   setTimeout(function() {
@@ -93,6 +95,72 @@ doBadThing(0)
 doBadThing(1)
   .then(function(res) {
     console.log(res);
+  })
+  .catch(function(err) {
+    console.error(err);
+  })
+
+
+// 5
+var fsp = {
+  readFile: function(file) {
+    // readFile
+    return new Promise(function(resolve, reject) {
+      fs.readFile(file, 'utf8', function(err, data) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      })
+    })
+  },
+  writeFile: function(file, text) {
+    // writeFile
+    return new Promise(function(resolve, reject) {
+      fs.writeFile(file, text, 'utf8', function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(text);
+        }
+      })
+    })
+  },
+  appendFile: function(file, text) {
+    // appendFile
+    return new Promise(function(resolve, reject) {
+      fs.appendFile(file, text, 'utf8', function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(text)
+        }
+      })
+    })
+  }
+}
+
+
+fsp.readFile('./data/lorem.txt')
+  .then(function(data) {
+    console.log(data);
+  })
+  .catch(function(err) {
+    console.error(err);
+  })
+
+fsp.writeFile('./data/test.txt', 'Hello World!')
+  .then(function(data) {
+    console.log(data);
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
+
+fsp.appendFile('./data/test.txt', 'Hello World, again.')
+  .then(function(data) {
+    console.log(data);
   })
   .catch(function(err) {
     console.error(err);
